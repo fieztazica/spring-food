@@ -10,7 +10,7 @@ import owlvernyte.springfood.service.OrderService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -19,36 +19,36 @@ public class OrderController {
     public String showAllOrder(Model model){
         List<Order> orders = orderService.getAll();
         model.addAttribute("orders",orders);
-        return "/order/list";
+        return "order/list";
     }
 
     @GetMapping("/add")
     public String addOrder(Model model){
         model.addAttribute("order",new Order());
-        return "/order/add";
+        return "order/add";
     }
     @PostMapping("/add")
     public String addOrder(@ModelAttribute("order") Order order){
         orderService.addOrder(order);
-        return "redirect:/order";
+        return "redirect:/orders";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteOrder(@PathVariable("id")Long id){
         orderService.Delete(id);
-        return "redirect:/order";
+        return "redirect:/orders";
     }
 
     @GetMapping("/edit/{id}")
     public String EditOrderF(@PathVariable("id")Long id,Model model){
         Order order = orderService.getById(id);
         model.addAttribute("order",order);
-        return "/order/edit";
+        return "order/edit";
     }
     @PostMapping("/edit")
     public String editOrder(@ModelAttribute("order")Order orderUpdate){
         Order order = orderService.getById(orderUpdate.getId());
         orderService.updateOrder(orderUpdate);
-        return "redirect:/order";
+        return "redirect:/orders";
     }
 }

@@ -10,35 +10,35 @@
 
 <div class="container">
     <h1>Add Order</h1>
-    <form th:action="@{/order/add}" th:object="${order}" method="post">
+    <form th:action="@{/orders/add}" th:object="${order}" method="post">
+<!--        <div class="col-6 mb-3">-->
+<!--            <label class="form-label" for="id">Id: </label>-->
+            <input class="form-control" type="hidden" th:field="*{id}" id="id">
+<!--        </div>-->
         <div class="col-6 mb-3">
-            <label class="form-label" for="id">Id: </label>
-            <input class="form-control" type="text" th:field="*{id}" id="id">
+            <label class="form-label" for="OrderedAt">Order At: </label>
+            <input class="form-control" type="text" th:field="*{OrderedAt}" id="OrderedAt">
         </div>
         <div class="col-6 mb-3">
-            <label class="form-label" for="OrderAt">Order At: </label>
-            <input class="form-control" type="text" th:field="*{OrderedAt}" id="OrderAt">
+            <label class="form-label" for="PaidAt">Paid At: </label>
+            <input class="form-control" type="text" th:field="*{PaidAt}" id="PaidAt">
         </div>
         <div class="col-6 mb-3">
-            <label class="form-label" for="amountLeft">Paid At: </label>
-            <input class="form-control" type="text" th:field="*{PaidAt}" id="amountLeft">
+            <label class="form-label" for="total">Total: </label>
+            <input class="form-control" type="text" th:field="*{total}" id="total">
         </div>
         <div class="col-6 mb-3">
-            <label class="form-label" for="price">Price: </label>
-            <input class="form-control" type="text" th:field="*{total}" id="price">
+            <label class="form-label" for="paid">Paid: </label>
+            <input class="form-control" type="text" th:field="*{paid}" id="paid">
         </div>
         <div class="col-6 mb-3">
-            <label class="form-label" for="pain">Pain: </label>
-            <input class="form-control" type="text" th:field="*{paid}" id="pain">
-        </div>
-        <div class="col-6 mb-3">
-            <label class="form-label" for="Change">Change: </label>
-            <input class="form-control" type="text" th:field="*{changeMoney}" id="Change">
+            <label class="form-label" for="changeMoney">Change: </label>
+            <input class="form-control" type="text" th:field="*{changeMoney}" id="changeMoney">
         </div>
         <input type="submit" class="btn btn-primary" value="Save">
     </form>
     <br>
-    <a th:href="@{/meals}">Back to List</a>
+    <a th:href="@{/orders}">Back to List</a>
 </div>
 
 </body>

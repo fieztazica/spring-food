@@ -10,7 +10,7 @@
 
 <div class="container">
     <h1>Order</h1>
-    <a th:href="@{/order/add}">add Order</a>
+    <a th:href="@{/orders/add}">add Order</a>
     <table class="table">
         <tr>
             <th>ID</th>
@@ -28,10 +28,10 @@
             <td th:text="${order.paid}"></td>
             <td th:text="${order.changeMoney}"></td>
             <td>
-                <a th:href="@{/order/edit/{id}(id=${order.id})}">
+                <a th:href="@{/orders/edit/{id}(id=${order.id})}">
                     Edit
                 </a> |
-                <a th:href="@{/order/delete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')">
+                <a th:href="@{/orders/delete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')">
                     Delete
                 </a>
             </td>
