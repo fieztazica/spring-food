@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
-
-@Entity
 @Data
-@Table(name = "Order")
+@Entity
+@Table(name = "Orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +20,8 @@ public class Order {
     private Double total;
     @Column(name = "paid")
     private Double paid;
-    @Column(name = "change")
-    private Double change;
+    @Column(name = "changeMoney")
+    private Double changeMoney;
     @Column(name = "user_id")
     private Long user_id;
 }
