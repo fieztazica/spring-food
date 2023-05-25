@@ -6,23 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content = "IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=l.0">
     <title>Login</title>
-    <th:block th:replace="~{layout :: link-css}"></th:block>
+
 </head>
 <body>
-<th:block th:replace="~{layout :: header}"></th:block>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
             <h3 class="card-title text-center">Login</h3>
             <form th:action="@{/login}" method="post">
                 <fieldset>
-                    <legend>Please login</legend>
-                    <div th:if="${param.error}" class="alert alert-danger">
-                        Invalid username and password.
-                    </div>
-                    <div th:if="${param.logout}" class="alert alert-success">
-                        You have been logged out.
-                    </div>
                     <div class="mb-3">
                         <label for="username" class="form-label">Username:</label>
                         <input type="text" required class="form-control" id="username" name="username">
@@ -43,6 +36,6 @@
         </div>
     </div>
 </div>
-<th:block th:replace="~{layout :: footer}"></th:block>;
+
 </body>
 </html >

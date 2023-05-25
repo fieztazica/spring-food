@@ -3,46 +3,49 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content = "IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=l.0">
-    <title>Login</title>
-    <th:block th:replace="~{layout :: link-css}"></th:block>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+
 </head>
 <body>
-<th:block th:replace="~{layout :: header}"></th:block>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
-            <h3 class="card-title text-center">Login</h3>
-            <form th:action="@{/login}" method="post">
-                <fieldset>
-                    <legend>Please login</legend>
-                    <div th:if="${param.error}" class="alert alert-danger">
-                        Invalid username and password.
-                    </div>
-                    <div th:if="${param.logout}" class="alert alert-success">
-                        You have been logged out.
-                    </div>
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username:</label>
-                        <input type="text" required class="form-control" id="username" name="username">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password:</label>
-                        <input type="password" required class="form-control" id="password" name="password">
-                    </div>
-                    <div class="mb-3">
-                        <input type="checkbox" name="remember-me" id="remember-me"><label for="remember-me">Remember me</label>
-                    </div>
-                    <div class="d-grid gap-2 form-action">
-                        <button type="submit" class="btn btn-primary">Login</button>
-                        <a class="text-primary text-center" href="/register">Don't have account. Sign up?</a>
-                    </div>
-                </fieldset>
+            <h3 class="card-title text-center">Sign Up</h3>
+            <form th:action="@{/register}" th:object="${user}" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">First Name:</label><span class="text-danger">*</span>
+                    <input type="text" class="form-control" th:field="*{name}" id="name">
+                    <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" th:field="*{email}" id="email">
+                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label"> Username:</label><span class="text-danger">*</span>
+                    <input type="text" class="form-control" id="username" th:field="*{username}">
+                    <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label"> Phone Number:</label><span class="text-danger">*</span>
+                    <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label><span class="text-danger">*</span>
+                    <input type="password" class="form-control" th:field="*{password}" id="password">
+                    <span  class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-info"> Sign up</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
-<th:block th:replace="~{layout :: footer}"></th:block>;
+
 </body>
-</html >
+</html>
