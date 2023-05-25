@@ -10,7 +10,7 @@
 
 <div class="container">
     <h1>Order</h1>
-    <a th:href="@{/meals/add}">add Order</a>
+    <a th:href="@{/order/add}">add Order</a>
     <table class="table">
         <tr>
             <th>ID</th>
@@ -22,7 +22,7 @@
         </tr>
         <tr th:each="order : ${orders}">
             <td th:text="${order.id}"></td>
-            <td th:text="${order.OrderedA}"></td>
+            <td th:text="${order.OrderedAt}"></td>
             <td th:text="${order.PaidAt}"></td>
             <td th:text="${order.total}"></td>
             <td th:text="${order.paid}"></td>
