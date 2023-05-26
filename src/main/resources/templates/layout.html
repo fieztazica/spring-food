@@ -7,13 +7,26 @@
 </head>
 <body>
 <header th:fragment="header">
-    <nav class="py-2 bg-body-tertiary border-bottom">
-        <div class="container d-flex flex-wrap">
-            <ul class="nav me-auto">
-                <li class="nav-item"><a href="/" class="nav-link link-dark px-2 active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="/meals" class="nav-link link-dark px-2">Meals</a></li>
-                <li class="nav-item"><a href="/orders" class="nav-link link-dark px-2">Orders</a></li>
-                <li class="nav-item"><a href="/cart" class="nav-link link-dark px-2">Cart</a></li>
+    <nav class="py-2 bg-body-tertiary border-bottom navbar navbar-expand-lg">
+        <div class="container-fluid container">
+            <a class="navbar-brand" href="/">
+                <span class="h3 fw-bold text-capitalize">Spring Food</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul id="nav-left" class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <li class="nav-item"><a href="/" class="nav-link link-dark px-2 active" aria-current="page">Home</a></li>
+                    <li class="nav-item"><a href="/meals" class="nav-link link-dark px-2">Meals</a></li>
+                    <li class="nav-item"><a href="/orders" class="nav-link link-dark px-2">Orders</a></li>
+                    <li class="nav-item"><a href="/cart" class="nav-link link-dark px-2">Cart</a></li>
+                </ul>
+            </div>
+
+            <ul id="nav-right" class="nav">
+                <li class="nav-item"><a href="/" class="nav-link link-dark px-2 active" aria-current="page">Login</a></li>
+                <li class="nav-item"><a href="/" class="nav-link link-dark px-2">Logout</a></li>
             </ul>
         </div>
     </nav>
