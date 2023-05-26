@@ -55,7 +55,7 @@ public class MealController {
             model.addAttribute("meal", editMeal);
             return "meal/edit";
         } else {
-            return "not-found";
+            return "error";
         }
     }
     @PostMapping("/edit")

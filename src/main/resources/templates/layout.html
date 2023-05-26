@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Food</title>
+    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<header th:fragment="header">
+    <nav class="py-2 bg-body-tertiary border-bottom">
+        <div class="container d-flex flex-wrap">
+            <ul class="nav me-auto">
+                <li class="nav-item"><a href="/" class="nav-link link-dark px-2 active" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="/books" class="nav-link link-dark px-2">List Book</a></li>
+                <li class="nav-item"><a href="/books/add" class="nav-link link-dark px-2">Add Book</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div th:insert="~{::${content}}">
+    <!-- Children -->
+</div>
+
+<footer th:fragment="footer">
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</footer>
+</body>
+</html>
