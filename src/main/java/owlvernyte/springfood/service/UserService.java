@@ -7,15 +7,12 @@ import owlvernyte.springfood.repository.IUserRepository;
 
 @Service
 public class UserService {
-
     @Autowired
     private IUserRepository userRepository;
-
 
     public void save(User user) {
         userRepository.save(user);
         Long userId = userRepository.getUserIdByUsername(user.getUsername());
-
-        }
-
     }
+
+}

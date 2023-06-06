@@ -31,4 +31,10 @@ public class User {
     @Column(name = "phone", length = 50, nullable = false)
     private String phone;
 
+    @ManyToMany
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 }
