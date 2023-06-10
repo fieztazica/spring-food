@@ -11,14 +11,16 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import java.util.List;
+
 @Controller
 public class UserController {
     @Autowired
     private UserService userService;
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "user/login";
     }
 
@@ -27,6 +29,7 @@ public class UserController {
         model.addAttribute("user", new User());
         return "user/register";
     }
+
     @PostMapping("/register")
     public String register(@ModelAttribute("user") User user,
                            BindingResult bindingResult, Model model) {
@@ -38,7 +41,7 @@ public class UserController {
             }
             return "user/register";
         }
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword ()));
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userService.save(user);
         return "redirect:/login";
     }

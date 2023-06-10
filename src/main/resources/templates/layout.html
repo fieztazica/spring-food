@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Spring Food</title>
@@ -12,12 +12,15 @@
             <a class="navbar-brand" href="/">
                 <span class="h3 fw-bold text-capitalize">Spring Food</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                    aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarScroll">
-                <ul id="nav-left" class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item"><a href="/" class="nav-link link-dark px-2 active" aria-current="page">Home</a></li>
+                <ul id="nav-left" class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+                    style="--bs-scroll-height: 100px;">
+                    <li class="nav-item"><a href="/" class="nav-link link-dark px-2 active" aria-current="page">Home</a>
+                    </li>
                     <li class="nav-item"><a href="/meals" class="nav-link link-dark px-2">Meals</a></li>
                     <li class="nav-item"><a href="/orders" class="nav-link link-dark px-2">Orders</a></li>
                     <li class="nav-item"><a href="/cart" class="nav-link link-dark px-2">Cart</a></li>
@@ -25,8 +28,18 @@
             </div>
 
             <ul id="nav-right" class="nav">
-                <li class="nav-item"><a href="/" class="nav-link link-dark px-2 active" aria-current="page">Login</a></li>
-                <li class="nav-item"><a href="/" class="nav-link link-dark px-2">Logout</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                        <button class="btn btn-outline-danger"
+                                type="submit">Logout
+                        </button>
+                    </form>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a class="btn btn-outline-primary" href="/login">
+                        Login
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -36,8 +49,13 @@
     <!-- Children -->
 </div>
 
-<footer th:fragment="footer">
+<footer th:fragment="footer" class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">Copyright &copy;
+        <span th:text="${#dates.year(#dates.createNow())}"></span>
+        <a href="https://www.hutech.edu.vn/">HUTECH Education</a>
+    </div>
     <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery-3.7.0.min.js}"></script>
 </footer>
 </body>
 </html>

@@ -13,6 +13,6 @@ import java.util.List;
 public class HomeController {
     @GetMapping
     public String home(Model model) {
-        return "redirect:/meals";
+        return "home/index";
     }
 }

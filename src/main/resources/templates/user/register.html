@@ -6,9 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
+    <th:block th:replace="layout :: link-css"></th:block>
 
 </head>
 <body>
+<th:block th:replace="layout :: header"></th:block>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -41,11 +43,13 @@
                 </div>
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-info"> Sign up</button>
+                    <a class="text-primary text-center" href="/login">Already have an account. Sign in?</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<th:block th:replace="layout :: footer"></th:block>
 </body>
 </html>

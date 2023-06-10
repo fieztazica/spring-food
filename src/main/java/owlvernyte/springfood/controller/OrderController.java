@@ -16,37 +16,39 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public String showAllOrder(Model model){
+    public String showAllOrder(Model model) {
         List<Order> orders = orderService.getAll();
-        model.addAttribute("orders",orders);
+        model.addAttribute("orders", orders);
         return "order/list";
     }
 
     @GetMapping("/add")
-    public String addOrder(Model model){
-        model.addAttribute("order",new Order());
+    public String addOrder(Model model) {
+        model.addAttribute("order", new Order());
         return "order/add";
     }
+
     @PostMapping("/add")
-    public String addOrder(@ModelAttribute("order") Order order){
+    public String addOrder(@ModelAttribute("order") Order order) {
         orderService.addOrder(order);
         return "redirect:/orders";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteOrder(@PathVariable("id")Long id){
+    public String deleteOrder(@PathVariable("id") Long id) {
         orderService.Delete(id);
         return "redirect:/orders";
     }
 
     @GetMapping("/edit/{id}")
-    public String EditOrderF(@PathVariable("id")Long id,Model model){
+    public String EditOrderF(@PathVariable("id") Long id, Model model) {
         Order order = orderService.getById(id);
-        model.addAttribute("order",order);
+        model.addAttribute("order", order);
         return "order/edit";
     }
+
     @PostMapping("/edit")
-    public String editOrder(@ModelAttribute("order")Order orderUpdate){
+    public String editOrder(@ModelAttribute("order") Order orderUpdate) {
         Order order = orderService.getById(orderUpdate.getId());
         orderService.updateOrder(orderUpdate);
         return "redirect:/orders";

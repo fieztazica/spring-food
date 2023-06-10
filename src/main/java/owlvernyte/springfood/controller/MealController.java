@@ -29,6 +29,7 @@ public class MealController {
         model.addAttribute("meal", new Meal());
         return "meal/add";
     }
+
     @PostMapping("/add")
     public String addMeal(@ModelAttribute("meal") Meal meal, BindingResult bindingResult, Model model) {
         if (bindingResult != null && bindingResult.hasErrors()) {
@@ -58,6 +59,7 @@ public class MealController {
             return "error";
         }
     }
+
     @PostMapping("/edit")
     public String editMeal(@ModelAttribute("meal") Meal updateMeal) {
         mealService.upsertMeal(updateMeal);
