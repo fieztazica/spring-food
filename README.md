@@ -14,4 +14,8 @@ spring.mail.username=<your-mail-username>
 spring.mail.password=<your-mail-password>
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+
+# Oauth2 service
+spring.security.oauth2.client.registration.google.client-id=<google-client-id>
+spring.security.oauth2.client.registration.google.client-secret=<google-client-secret>
 ```

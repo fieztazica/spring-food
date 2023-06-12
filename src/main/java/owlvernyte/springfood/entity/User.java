@@ -25,10 +25,10 @@ public class User {
     @Column(name = "email", length = 50)
     private String email;
 
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "phone", length = 50, nullable = false)
+    @Column(name = "phone", length = 50)
     private String phone;
 
     @ManyToMany
@@ -37,4 +37,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @Column(name = "provider", length = 50)
+    private String provider;
 }

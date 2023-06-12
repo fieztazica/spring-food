@@ -1,7 +1,9 @@
 package owlvernyte.springfood.util;
 
 
+import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,13 +13,28 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.SecurityFilterChain;
 import owlvernyte.springfood.service.CustomUserDetailService;
+import owlvernyte.springfood.service.OAuthService;
+import owlvernyte.springfood.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final OAuthService oAuthService;
+
+    private final UserService userService;
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new CustomUserDetailService();
@@ -39,23 +56,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(@NotNull
                                                    HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/",
-                                "/register", "/error", "/contact", "/email/**")
-                        .permitAll()
-                        .requestMatchers("/meals/edit",
-                                "/meals/delete", "/meals/add")
-                        .hasAnyAuthority("ADMIN")
-                        .requestMatchers("/meals")
+        http
+                .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/css/**", "/js/**", "/",
+                                        "/register", "/error", "/contact", "/email/**", "/oauth/**")
+                                .permitAll()
+                                .requestMatchers("/meals/edit",
+                                        "/meals/delete", "/meals/add")
+                                .hasAnyAuthority("ADMIN")
+                                .requestMatchers("/meals")
                                 .permitAll()
 //                        .hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/orders/**")
-                        .hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/**")
-                        .hasAnyAuthority("USER", "ADMIN")
-                        .anyRequest()
-                        .authenticated()
+                                .requestMatchers("/orders/**")
+                                .hasAnyAuthority("USER", "ADMIN")
+                                .requestMatchers("/api/**")
+                                .hasAnyAuthority("USER", "ADMIN")
+                                .anyRequest()
+                                .authenticated()
                 )
+                .oauth2Login(oauth2Login -> oauth2Login.loginPage("/login")
+                        .failureUrl("/login?error")
+                        .userInfoEndpoint(userInfoEndpoint ->
+                                userInfoEndpoint
+                                        .userService(oAuthService)
+                        )
+                        .successHandler(
+                                (request, response,
+                                 authentication) -> {
+                                    var oidcUser = (DefaultOidcUser) authentication.getPrincipal();
+                                    userService.saveOauthUser(oidcUser.getEmail(), oidcUser.getName());
+                                    response.sendRedirect("/");
+                                }
+                        )
+                        .permitAll())
                 .logout(logout ->
                         logout.logoutUrl("/logout")
                                 .logoutSuccessUrl("/login")
@@ -82,8 +115,9 @@ public class SecurityConfig {
                         sessionManagement.maximumSessions(1)
                                 .expiredUrl("/login")
                 )
-                .httpBasic(httpBasic -> httpBasic.realmName("dat"))
-                .build();
+                .httpBasic(httpBasic -> httpBasic.realmName("dat"));
+
+        return http.build();
     }
 
 }

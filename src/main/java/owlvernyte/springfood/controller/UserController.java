@@ -41,7 +41,6 @@ public class UserController {
             }
             return "user/register";
         }
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userService.save(user);
         return "redirect:/login";
     }
