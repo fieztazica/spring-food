@@ -35,4 +35,10 @@ public class UserService {
         user.getRoles().add(roleRepository.findRoleById(Role.USER.value));
         userRepository.save(user);
     }
+
+    public void setDefaultRole(String username){
+        userRepository.findByUsername(username).getRoles()
+                .add(roleRepository
+                        .findRoleById(Role.USER.value));
+    }
 }
