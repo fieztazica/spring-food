@@ -15,4 +15,9 @@ public class HomeController {
     public String home(Model model) {
         return "home/index";
     }
+
+    @GetMapping("/contact")
+    public String contact(Model model) {
+        return "redirect:/email";
+    }
 }

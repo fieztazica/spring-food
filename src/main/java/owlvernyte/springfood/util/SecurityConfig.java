@@ -41,7 +41,7 @@ public class SecurityConfig {
                                                    HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/",
-                                "/register", "/error")
+                                "/register", "/error", "/contact", "/email/**")
                         .permitAll()
                         .requestMatchers("/meals/edit",
                                 "/meals/delete", "/meals/add")

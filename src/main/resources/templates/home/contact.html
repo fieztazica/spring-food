@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Contact</title>
-  <th:block th:replace="layout :: link-css"></th:block>
+    <meta charset="UTF-8">
+    <title>Contact</title>
+    <th:block th:replace="layout :: link-css"></th:block>
 </head>
 <body>
 <th:block th:replace="layout :: header"></th:block>
 
 <div class="container">
+    <form th:action="@{/email}" th:object="${email}" method="post">
+        <label class="form-label" for="name">Người gửi:</label>
+        <br>
+        <input required class="form-control" type="text" name="name" id="name" style="width:100%" maxlength="250"
+               th:field="*{name}">
 
+        <label class="form-label" for="email">Email:</label>
+        <br>
+        <input required class="form-control" type="email" name="email" id="email" style="width:100%" maxlength="100"
+               th:field="*{email}">
+
+        <label class="form-label" for="subject">Subject:</label>
+        <br>
+        <input required class="form-control" type="text" name="subject" id="subject" style="width:100%" th:field="*{subject}">
+
+        <label class="form-label" for="body">Nội dung:</label>
+        <br>
+        <textarea required class="form-control" th:field="*{body}" name="body" id="body" cols="40" rows="5"
+                  style="width:100%;height:150px;"></textarea>
+
+        <div>
+            <button class="btn btn-primary" type="submit">Send</button>
+<!--            <button class="btn btn-primary" type="submit" th:formaction="'/email/html'">Send HTML</button>-->
+        </div>
+    </form>
 </div>
 
 <th:block th:replace="layout :: footer"></th:block>
