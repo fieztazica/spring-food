@@ -107,8 +107,6 @@ public class CartController {
         }
     }
 
-
-
     private void setOrderDetailsFromCart(Order order, Cart cart) {
         Set<OrderDetail> orderDetails = new HashSet<>();
 

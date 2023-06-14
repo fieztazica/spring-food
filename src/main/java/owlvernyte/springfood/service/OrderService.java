@@ -14,7 +14,6 @@ import java.util.Optional;
 public class OrderService {
     @Autowired
     private IOrderRepository orderRepository;
-    private static final String ORDER_SESSION_KEY = "order";
 
     public List<Order> getAll() {
         return orderRepository.findAll();
@@ -35,22 +34,5 @@ public class OrderService {
 
     public void delete(Long id) {
         orderRepository.deleteById(id);
-    }
-
-    public Order getSessionOrder(@NotNull HttpSession session) {
-        return Optional.ofNullable((Order) session.getAttribute(ORDER_SESSION_KEY))
-                .orElseGet(() -> {
-                    Order order = new Order();
-                    session.setAttribute(ORDER_SESSION_KEY, order);
-                    return order;
-                });
-    }
-
-    public void updateSessionOrder(@NotNull HttpSession session, Order order) {
-        session.setAttribute(ORDER_SESSION_KEY, order);
-    }
-
-    public void removeSessionOrder(@NotNull HttpSession session) {
-        session.removeAttribute(ORDER_SESSION_KEY);
     }
 }
