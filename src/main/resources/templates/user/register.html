@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <th:block th:replace="layout :: link-css"></th:block>
+    <th:block th:replace="layout :: style-css"></th:block>
 
 </head>
 <body>
@@ -46,6 +47,12 @@
                     <a class="text-primary text-center" href="/login">Already have an account. Sign in?</a>
                 </div>
             </form>
+            <div class="text-divider"><span>OR</span></div>
+            <div class="text-center">
+                <a href="/oauth2/authorization/google" class="btn btn-outline-danger btn-floating m-1" role="button">
+                    Login with Google
+                </a>
+            </div>
         </div>
     </div>
 </div>

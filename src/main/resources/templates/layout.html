@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Spring Food</title>
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link th:fragment="style-css" rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <header th:fragment="header">
@@ -29,6 +30,10 @@
             </div>
 
             <ul id="nav-right" class="nav">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <span sec:authorize="hasAnyAuthority('ADMIN')">ADMIN</span>
+                    <span class="px-2" sec:authentication="name"></span>
+                </li>
                 <li sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" method="post">
                         <button class="btn btn-outline-danger"

@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.SecurityFilterChain;
+import owlvernyte.springfood.service.CustomOAuth2UserService;
 import owlvernyte.springfood.service.CustomUserDetailService;
 import owlvernyte.springfood.service.OAuthService;
 import owlvernyte.springfood.service.UserService;
@@ -31,7 +32,7 @@ import owlvernyte.springfood.service.UserService;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final OAuthService oAuthService;
+    private final CustomOAuth2UserService oAuthService;
 
     private final UserService userService;
 
