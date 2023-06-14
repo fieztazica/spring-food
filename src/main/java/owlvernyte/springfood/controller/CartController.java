@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,59 +75,52 @@ public class CartController {
     @GetMapping("/checkout")
     public String checkout(Model model, HttpSession session, Principal principal) {
         Cart cart = cartService.getCart(session);
-
-        if (cart.getCartItems().isEmpty()) return "redirect:/cart";
-
-        double totalPrice = cart.getCartItems()
-                .stream()
-                .map(x -> x.getPrice() * x.getQuantity())
-                .mapToDouble(x -> x)
-                .sum();
-
-        double totalBill = totalPrice;
-        Order order = new Order();
-        order.setTotal(totalBill);
-        order.setOrderedAt(LocalDate.now());
-        cart.getCartItems().forEach(item -> {
-            OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setMeal(item.getName());
-            orderDetail.setQuantity(item.getQuantity());
-            orderDetail.setTotalPrice(item.getQuantity() * item.getPrice());
-            order.getOrderDetails().add(orderDetail);
-        });
-
-        model.addAttribute("order", order);
-
-        orderService.updateSessionOrder(session, order);
+        model.addAttribute("cart", cart);
         return "order/checkout";
     }
 
     @PostMapping("/checkout")
     public String checkout(HttpSession session, Principal principal) {
         try {
-            User user = userService.findByUsername(principal.getName());
             Cart cart = cartService.getCart(session);
-            Order order = orderService.getSessionOrder(session);
+            if (cart.getCartItems().isEmpty()) return "redirect:/cart";
+
+            double totalPrice = cart.getCartItems()
+                    .stream()
+                    .map(x -> x.getPrice() * x.getQuantity())
+                    .mapToDouble(x -> x)
+                    .sum();
+
+            double totalBill = totalPrice;
+            User user = userService.findByUsername(principal.getName());
+            Order order = new Order();
+            order.setTotal(totalBill);
             order.setUser(user);
-
+            order.setOrderedAt(LocalDate.now());
             orderService.addOrder(order);
-
-            cart.getCartItems().forEach(item -> {
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setMeal(item.getName());
-                orderDetail.setQuantity(item.getQuantity());
-                orderDetail.setTotalPrice(item.getQuantity() * item.getPrice());
-                orderDetail.setOrder(order);
-                orderDetailService.addOrderDetail(orderDetail);
-            });
-
-            cartService.removeCart(session);
-            orderService.removeSessionOrder(session);
+            setOrderDetailsFromCart(order,cart);
 
             return "redirect:/orders/cash-pay";
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return "not-found";
         }
+    }
+
+
+
+    private void setOrderDetailsFromCart(Order order, Cart cart) {
+        Set<OrderDetail> orderDetails = new HashSet<>();
+
+        cart.getCartItems().forEach(item -> {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setMeal(item.getName());
+            orderDetail.setQuantity(item.getQuantity());
+            orderDetail.setTotalPrice(item.getQuantity() * item.getPrice());
+            orderDetails.add(orderDetail);
+            orderDetail.setOrder(order);
+            orderDetailService.addOrderDetail(orderDetail);
+        });
+        order.setOrderDetails(orderDetails);
     }
 }
