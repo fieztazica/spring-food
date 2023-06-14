@@ -88,8 +88,11 @@ public class CartController {
     @PostMapping("/checkout")
     public String checkout(HttpSession session,@ModelAttribute("order") Order order, Principal principal) {
         Cart cart = cartService.getCart(session);
-        Set<OrderDetail> orderDetails = new HashSet<>();
         setOrderDetailsFromCart(order,cart);
+        order.getOrderDetails().forEach(orderDetail -> {
+//            orderDetail.setOrder(order);
+            orderDetailService.addOrderDetail(orderDetail);
+        });
         if (principal != null) {
             User user = userService.findByUsername(principal.getName());
             order.setUser(user);

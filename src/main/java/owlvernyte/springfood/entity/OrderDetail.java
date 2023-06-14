@@ -16,7 +16,7 @@ public class OrderDetail {
     private int quantity;
     @Column(name = "total_price")
     private double totalPrice;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,optional = true)
     @JoinColumn(name = "order_id")
     private Order order;
 }
