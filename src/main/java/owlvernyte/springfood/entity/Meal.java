@@ -26,6 +26,10 @@ public class Meal {
     @Column(name = "price")
     private double price;
 
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
     public Meal() {
     }
 

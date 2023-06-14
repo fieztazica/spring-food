@@ -3,7 +3,10 @@ package owlvernyte.springfood.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "Orders")
@@ -13,15 +16,19 @@ public class Order {
     private Long id;
 
     @Column(name = "OrderedAt")
-    private Date OrderedAt;
+    private LocalDate OrderedAt;
     @Column(name = "PaidAt")
-    private Date PaidAt;
+    private LocalDate PaidAt;
     @Column(name = "total")
     private Double total;
     @Column(name = "paid")
     private Double paid;
     @Column(name = "changeMoney")
     private Double changeMoney;
-    @Column(name = "user_id")
-    private Long user_id;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private Set<OrderDetail> orderDetails;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

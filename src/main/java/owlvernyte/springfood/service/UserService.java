@@ -41,4 +41,7 @@ public class UserService {
                 .add(roleRepository
                         .findRoleById(Role.USER.value));
     }
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }

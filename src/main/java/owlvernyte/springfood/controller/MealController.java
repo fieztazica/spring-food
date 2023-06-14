@@ -1,12 +1,15 @@
 package owlvernyte.springfood.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import owlvernyte.springfood.entity.CartItem;
 import owlvernyte.springfood.entity.Meal;
+import owlvernyte.springfood.service.CartService;
 import owlvernyte.springfood.service.MealService;
 
 import java.util.List;
@@ -17,6 +20,8 @@ public class MealController {
     @Autowired
     private MealService mealService;
 
+    @Autowired
+    private CartService cartService;
     @GetMapping
     public String listMeals(Model model) {
         List<Meal> meals = mealService.getAllMeals();
@@ -69,6 +74,19 @@ public class MealController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         mealService.deleteMeal(id);
+        return "redirect:/meals";
+    }
+
+    @PostMapping("/add-to-cart")
+    public String addToCart(HttpSession session,
+                            @RequestParam long id,
+                            @RequestParam String title,
+                            @RequestParam double price,
+                            @RequestParam(defaultValue = "1") int quantity)
+    {
+        var cart = cartService.getCart(session);
+        cart.addItems(new CartItem(id, title, price, quantity));
+        cartService.updateCart(session, cart);
         return "redirect:/meals";
     }
 }

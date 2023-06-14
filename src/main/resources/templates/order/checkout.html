@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+</head>
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container">
+    <h1>Checkout</h1>
+
+    <form th:action="@{/cart/checkout}" th:object="${order}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{total}" />
+        <input type="hidden" th:field="*{paid}" />
+        <input type="hidden" th:field="*{changeMoney}" />
+        <input type="hidden" th:field="*{PaidAt}" />
+        <input type="hidden" th:field="*{OrderedAt}" />
+
+
+        <!-- Display order details -->
+        <label for="order-details">Order Details:</label>
+        <table class="table" id="order-details">
+            <thead>
+            <tr>
+                <th scope="col">Meal</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderDetail : ${order.orderDetails}">
+                <td th:text="${orderDetail.Meal}"></td>
+                <td th:text="${orderDetail.quantity}"></td>
+                <td th:text="${orderDetail.totalPrice}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            <button class="btn btn-primary" type="submit">Proceed to Payment</button>
+        </div>
+    </form>
+</div>
+
+<th:block th:replace="layout :: footer"></th:block>
+</body>
+</html>

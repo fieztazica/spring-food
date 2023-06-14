@@ -15,6 +15,7 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Image</th>
             <th>Category</th>
             <th>Amount Left</th>
             <th>Price</th>
@@ -23,6 +24,9 @@
         <tr th:each="meal : ${meals}">
             <td th:text="${meal.id}"></td>
             <td th:text="${meal.name}"></td>
+            <td>
+                <img src="${meal.imageUrl}">
+            </td>
             <td th:text="${meal.category}"></td>
             <td th:text="${meal.amountLeft}"></td>
             <td th:text="${meal.price}"></td>
@@ -33,6 +37,15 @@
                 <a th:href="@{/meals/delete/{id}(id=${meal.id})}" onclick="return confirm('Are you sure?')">
                     Delete
                 </a>
+                <form th:action="@{/meals/add-to-cart}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${meal.getId()}">
+                    <input type="hidden" name="title"th:value="${meal.getName()}">
+                    <input type="hidden" name="price"
+                           th:value="${meal.getPrice()}">
+                    <button type="submit" class="btn btn-success"
+                            onclick="return confirm('Are you sure you want to add this book to cart?')">
+                        Add to cart</button>
+                </form>
             </td>
         </tr>
     </table>
