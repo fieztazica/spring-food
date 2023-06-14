@@ -13,25 +13,30 @@ import java.util.Optional;
 @Service
 public class OrderService {
     @Autowired
-    private IOrderRepository orderRepo;
+    private IOrderRepository orderRepository;
     private static final String ORDER_SESSION_KEY = "order";
-    public List<Order> getAll(){
-        return orderRepo.findAll();
+
+    public List<Order> getAll() {
+        return orderRepository.findAll();
     }
 
-    public Order getById(Long id){
-        Optional<Order>order = orderRepo.findById(id);
+    public Order findOrderById(Long id) {
+        Optional<Order> order = orderRepository.findById(id);
         return order.orElse(null);
     }
-    public void addOrder(Order addOrder){
-        orderRepo.save(addOrder);
+
+    public void addOrder(Order addOrder) {
+        orderRepository.save(addOrder);
     }
-    public void updateOrder(Order addOrder){
-        orderRepo.save(addOrder);
+
+    public void updateOrder(Order addOrder) {
+        orderRepository.save(addOrder);
     }
-    public void Delete(Long id){
-        orderRepo.deleteById(id);
+
+    public void delete(Long id) {
+        orderRepository.deleteById(id);
     }
+
     public Order getSessionOrder(@NotNull HttpSession session) {
         return Optional.ofNullable((Order) session.getAttribute(ORDER_SESSION_KEY))
                 .orElseGet(() -> {
@@ -40,9 +45,11 @@ public class OrderService {
                     return order;
                 });
     }
+
     public void updateSessionOrder(@NotNull HttpSession session, Order order) {
         session.setAttribute(ORDER_SESSION_KEY, order);
     }
+
     public void removeSessionOrder(@NotNull HttpSession session) {
         session.removeAttribute(ORDER_SESSION_KEY);
     }

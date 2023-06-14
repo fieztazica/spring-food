@@ -3,6 +3,8 @@ package owlvernyte.springfood.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,8 @@ import java.util.Set;
 @RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
+    Logger logger = LoggerFactory.getLogger(CartController.class);
+
     @Autowired
     private CartService cartService;
 
@@ -38,6 +42,7 @@ public class CartController {
 
     @Autowired
     private OrderDetailService orderDetailService;
+
     @GetMapping
     public String showCart(HttpSession session, @NotNull Model model) {
         model.addAttribute("cart", cartService.getCart(session));
@@ -45,27 +50,32 @@ public class CartController {
         model.addAttribute("totalQuantity", cartService.getSumQuantity(session));
         return "cart/index";
     }
+
     @GetMapping("/removeFromCart/{id}")
     public String removeFromCart(HttpSession session, @PathVariable Long id) {
         var cart = cartService.getCart(session);
         cart.removeItems(id);
         return "redirect:/cart";
     }
+
     @GetMapping("/updateCart/{id}/{quantity}")
     public String updateCart(HttpSession session, @PathVariable Long id, @PathVariable int quantity) {
         var cart = cartService.getCart(session);
         cart.updateItems(id, quantity);
         return "cart/index";
     }
+
     @GetMapping("/clearCart")
     public String clearCart(HttpSession session) {
         cartService.removeCart(session);
-        return "redirect:/cart ";
+        return "redirect:/cart";
     }
 
     @GetMapping("/checkout")
-    public String checkout(Model model, HttpSession session,Principal principal) {
+    public String checkout(Model model, HttpSession session, Principal principal) {
         Cart cart = cartService.getCart(session);
+
+        if (cart.getCartItems().isEmpty()) return "redirect:/cart";
 
         double totalPrice = cart.getCartItems()
                 .stream()
@@ -74,45 +84,49 @@ public class CartController {
                 .sum();
 
         double totalBill = totalPrice;
-        User user = userService.findByUsername(principal.getName());
         Order order = new Order();
         order.setTotal(totalBill);
-        order.setUser(user);
         order.setOrderedAt(LocalDate.now());
-        setOrderDetailsFromCart(order, cart);
-
-        model.addAttribute("order", order);
-        return "order/checkout";
-    }
-
-    @PostMapping("/checkout")
-    public String checkout(HttpSession session,@ModelAttribute("order") Order order, Principal principal) {
-        Cart cart = cartService.getCart(session);
-        setOrderDetailsFromCart(order,cart);
-        order.getOrderDetails().forEach(orderDetail -> {
-//            orderDetail.setOrder(order);
-            orderDetailService.addOrderDetail(orderDetail);
-        });
-        if (principal != null) {
-            User user = userService.findByUsername(principal.getName());
-            order.setUser(user);
-        }
-        orderService.getSessionOrder(session);
-        orderService.updateSessionOrder(session, order);
-
-        return "redirect:/orders/cash-pay";
-    }
-
-    private void setOrderDetailsFromCart(@ModelAttribute("order") Order order, Cart cart) {
-        Set<OrderDetail> orderDetails = new HashSet<>();
-
         cart.getCartItems().forEach(item -> {
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setMeal(item.getName());
             orderDetail.setQuantity(item.getQuantity());
             orderDetail.setTotalPrice(item.getQuantity() * item.getPrice());
-            orderDetails.add(orderDetail);
+            order.getOrderDetails().add(orderDetail);
         });
-        order.setOrderDetails(orderDetails);
+
+        model.addAttribute("order", order);
+
+        orderService.updateSessionOrder(session, order);
+        return "order/checkout";
+    }
+
+    @PostMapping("/checkout")
+    public String checkout(HttpSession session, Principal principal) {
+        try {
+            User user = userService.findByUsername(principal.getName());
+            Cart cart = cartService.getCart(session);
+            Order order = orderService.getSessionOrder(session);
+            order.setUser(user);
+
+            orderService.addOrder(order);
+
+            cart.getCartItems().forEach(item -> {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setMeal(item.getName());
+                orderDetail.setQuantity(item.getQuantity());
+                orderDetail.setTotalPrice(item.getQuantity() * item.getPrice());
+                orderDetail.setOrder(order);
+                orderDetailService.addOrderDetail(orderDetail);
+            });
+
+            cartService.removeCart(session);
+            orderService.removeSessionOrder(session);
+
+            return "redirect:/orders/cash-pay";
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return "not-found";
+        }
     }
 }

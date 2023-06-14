@@ -8,9 +8,9 @@ import owlvernyte.springfood.repository.IOrderDetailRepository;
 @Service
 public class OrderDetailService {
     @Autowired
-    private IOrderDetailRepository iOrderDetailRepository;
+    private IOrderDetailRepository orderDetailRepository;
 
     public void addOrderDetail(OrderDetail orderDetail){
-        iOrderDetailRepository.save(orderDetail);
+        orderDetailRepository.save(orderDetail);
     }
 }

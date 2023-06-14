@@ -39,29 +39,26 @@ public class OrderController {
 
     @GetMapping("/delete/{id}")
     public String deleteOrder(@PathVariable("id") Long id) {
-        orderService.Delete(id);
+        orderService.delete(id);
         return "redirect:/orders";
     }
 
     @GetMapping("/edit/{id}")
     public String EditOrderF(@PathVariable("id") Long id, Model model) {
-        Order order = orderService.getById(id);
+        Order order = orderService.findOrderById(id);
         model.addAttribute("order", order);
         return "order/edit";
     }
 
     @PostMapping("/edit")
     public String editOrder(@ModelAttribute("order") Order orderUpdate) {
-        Order order = orderService.getById(orderUpdate.getId());
-        orderService.updateOrder(orderUpdate);
+        Order order = orderService.findOrderById(orderUpdate.getId());
+        orderService.updateOrder(order);
         return "redirect:/orders";
     }
-    @GetMapping("cash-pay")
-    public String cashPay(HttpSession session) {
-        Order order = orderService.getSessionOrder(session);
-        orderService.addOrder(order);
-        cartService.removeCart(session);
-        orderService.removeSessionOrder(session);
+
+    @GetMapping("/cash-pay")
+    public String cashPay() {
         return "order/cash-result";
     }
 }

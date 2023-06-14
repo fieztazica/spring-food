@@ -31,12 +31,12 @@ public class User {
     @Column(name = "phone", length = 50)
     private String phone;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Meal> meals = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

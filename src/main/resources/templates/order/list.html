@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Order</title>
@@ -28,7 +28,7 @@
             <td th:text="${order.paid}"></td>
             <td th:text="${order.changeMoney}"></td>
             <td>
-                <a th:href="@{/orders/edit/{id}(id=${order.id})}">
+                <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/orders/edit/{id}(id=${order.id})}">
                     Edit
                 </a> |
                 <a th:href="@{/orders/delete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')">
