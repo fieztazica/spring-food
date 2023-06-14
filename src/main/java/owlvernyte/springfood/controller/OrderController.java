@@ -5,11 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import owlvernyte.springfood.entity.Cart;
 import owlvernyte.springfood.entity.Order;
+import owlvernyte.springfood.entity.OrderDetail;
 import owlvernyte.springfood.service.CartService;
+import owlvernyte.springfood.service.OrderDetailService;
 import owlvernyte.springfood.service.OrderService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/orders")
@@ -18,6 +23,8 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private OrderDetailService orderDetailService;
     @GetMapping
     public String showAllOrder(Model model) {
         List<Order> orders = orderService.getAll();
@@ -58,8 +65,6 @@ public class OrderController {
     }
     @GetMapping("cash-pay")
     public String cashPay(HttpSession session) {
-        Order order = orderService.getSessionOrder(session);
-        orderService.addOrder(order);
         cartService.removeCart(session);
         orderService.removeSessionOrder(session);
         return "order/cash-result";

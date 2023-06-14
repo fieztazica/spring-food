@@ -10,14 +10,7 @@
 <div class="container">
     <h1>Checkout</h1>
 
-    <form th:action="@{/cart/checkout}" th:object="${order}" method="post">
-        <input type="hidden" th:field="*{id}" />
-        <input type="hidden" th:field="*{total}" />
-        <input type="hidden" th:field="*{paid}" />
-        <input type="hidden" th:field="*{changeMoney}" />
-        <input type="hidden" th:field="*{PaidAt}" />
-        <input type="hidden" th:field="*{OrderedAt}" />
-
+    <form th:action="@{/cart/checkout}" th:object="${cart}" method="post">
 
         <!-- Display order details -->
         <label for="order-details">Order Details:</label>
@@ -30,10 +23,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="orderDetail : ${order.orderDetails}">
-                <td th:text="${orderDetail.Meal}"></td>
+            <tr th:each="orderDetail : ${cart.cartItems}">
+                <td th:text="${orderDetail.name}"></td>
                 <td th:text="${orderDetail.quantity}"></td>
-                <td th:text="${orderDetail.totalPrice}"></td>
+                <td th:text="${orderDetail.price} * ${orderDetail.quantity}"></td>
             </tr>
             </tbody>
         </table>

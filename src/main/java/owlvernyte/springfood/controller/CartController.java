@@ -3,6 +3,7 @@ package owlvernyte.springfood.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,7 +67,13 @@ public class CartController {
     @GetMapping("/checkout")
     public String checkout(Model model, HttpSession session,Principal principal) {
         Cart cart = cartService.getCart(session);
+        model.addAttribute("cart", cart);
+        return "order/checkout";
+    }
 
+    @PostMapping("/checkout")
+    public String checkout(HttpSession session, Principal principal) {
+        Cart cart = cartService.getCart(session);
         double totalPrice = cart.getCartItems()
                 .stream()
                 .map(x -> x.getPrice() * x.getQuantity())
@@ -79,22 +86,9 @@ public class CartController {
         order.setTotal(totalBill);
         order.setUser(user);
         order.setOrderedAt(LocalDate.now());
-        setOrderDetailsFromCart(order, cart);
-
-        model.addAttribute("order", order);
-        return "order/checkout";
-    }
-
-    @PostMapping("/checkout")
-    public String checkout(HttpSession session,@ModelAttribute("order") Order order, Principal principal) {
-        Cart cart = cartService.getCart(session);
+        orderService.addOrder(order);
         setOrderDetailsFromCart(order,cart);
-        order.getOrderDetails().forEach(orderDetail -> {
-//            orderDetail.setOrder(order);
-            orderDetailService.addOrderDetail(orderDetail);
-        });
         if (principal != null) {
-            User user = userService.findByUsername(principal.getName());
             order.setUser(user);
         }
         orderService.getSessionOrder(session);
@@ -103,7 +97,7 @@ public class CartController {
         return "redirect:/orders/cash-pay";
     }
 
-    private void setOrderDetailsFromCart(@ModelAttribute("order") Order order, Cart cart) {
+    private void setOrderDetailsFromCart(Order order, Cart cart) {
         Set<OrderDetail> orderDetails = new HashSet<>();
 
         cart.getCartItems().forEach(item -> {
@@ -112,6 +106,8 @@ public class CartController {
             orderDetail.setQuantity(item.getQuantity());
             orderDetail.setTotalPrice(item.getQuantity() * item.getPrice());
             orderDetails.add(orderDetail);
+            orderDetail.setOrder(order);
+            orderDetailService.addOrderDetail(orderDetail);
         });
         order.setOrderDetails(orderDetails);
     }
