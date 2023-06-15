@@ -22,6 +22,7 @@ public class HomeController {
         if (authentication != null && authentication.isAuthenticated())
             model.addAttribute("role",
                     authentication.getAuthorities());
+        model.addAttribute("meals",mealService.getAllMeals());
         return "home/index";
     }
 

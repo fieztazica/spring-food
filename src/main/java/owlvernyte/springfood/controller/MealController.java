@@ -108,6 +108,6 @@ public class MealController {
         var cart = cartService.getCart(session);
         cart.addItems(new CartItem(id, title, price, quantity));
         cartService.updateCart(session, cart);
-        return "redirect:/meals";
+        return "redirect:/";
     }
 }
