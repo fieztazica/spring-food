@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import owlvernyte.springfood.entity.Order;
+import owlvernyte.springfood.entity.User;
 import owlvernyte.springfood.repository.IOrderRepository;
+import owlvernyte.springfood.repository.IUserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +17,15 @@ public class OrderService {
     @Autowired
     private IOrderRepository orderRepository;
 
+    @Autowired
+    private IUserRepository userRepository;
+
     public List<Order> getAll() {
         return orderRepository.findAll();
+    }
+
+    public List<Order> findAllByUser(User user) {
+        return orderRepository.findAllByUser(user);
     }
 
     public Order findOrderById(Long id) {
