@@ -10,14 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import owlvernyte.springfood.entity.Cart;
-import owlvernyte.springfood.entity.Order;
-import owlvernyte.springfood.entity.OrderDetail;
-import owlvernyte.springfood.entity.User;
-import owlvernyte.springfood.service.CartService;
-import owlvernyte.springfood.service.OrderDetailService;
-import owlvernyte.springfood.service.OrderService;
-import owlvernyte.springfood.service.UserService;
+import owlvernyte.springfood.entity.*;
+import owlvernyte.springfood.service.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -41,6 +35,8 @@ public class CartController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private MealService mealService;
     @Autowired
     private OrderDetailService orderDetailService;
 
@@ -122,6 +118,11 @@ public class CartController {
             orderDetails.add(orderDetail);
             orderDetail.setOrder(order);
             orderDetailService.addOrderDetail(orderDetail);
+            Meal meal = mealService.getMealById(item.getId());
+            Long AmountLeft = meal.getAmountLeft();
+            int quantity = item.getQuantity();
+            meal.setAmountLeft(AmountLeft-quantity);
+            mealService.upsertMeal(meal);
         });
         order.setOrderDetails(orderDetails);
     }
