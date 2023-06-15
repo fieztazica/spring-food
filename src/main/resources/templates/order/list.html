@@ -10,7 +10,7 @@
 
 <div class="container">
     <h1>Order</h1>
-    <a th:href="@{/orders/add}">add Order</a>
+    <a sec:authorize="hasAnyAuthority('ADMIN')"  th:href="@{/orders/add}">Add Order</a>
     <table class="table">
         <tr>
             <th>ID</th>
