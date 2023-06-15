@@ -24,11 +24,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/meals")
 public class MealController {
+    private static final String UPLOAD_DIRECTORY = "/images";
+
     @Autowired
     private MealService mealService;
 
     @Autowired
     private CartService cartService;
+
     @GetMapping
     public String listMeals(Model model) {
         List<Meal> meals = mealService.getAllMeals();
@@ -83,16 +86,17 @@ public class MealController {
         mealService.deleteMeal(id);
         return "redirect:/meals";
     }
+
     @PostMapping("/upload")
-    public String uploadImage(Model model, @RequestParam("imageUrl") MultipartFile file) throws IOException {
+    public String uploadImage(Model model, @RequestParam("file") MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
-            String uploadDir = "F:/JetBrains/images";
+            String uploadDir = UPLOAD_DIRECTORY;
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             String filePath = uploadDir + File.separator + fileName;
             File destination = new File(filePath);
             file.transferTo(destination);
 
-            model.addAttribute("images", "Uploaded image: " + fileName);
+            model.addAttribute("images", filePath);
         }
 
         return "redirect:/meals";
@@ -103,8 +107,7 @@ public class MealController {
                             @RequestParam long id,
                             @RequestParam String title,
                             @RequestParam double price,
-                            @RequestParam(defaultValue = "1") int quantity)
-    {
+                            @RequestParam(defaultValue = "1") int quantity) {
         var cart = cartService.getCart(session);
         cart.addItems(new CartItem(id, title, price, quantity));
         cartService.updateCart(session, cart);

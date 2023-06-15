@@ -33,7 +33,8 @@
     </div>
     <div class="col-6 mb-3">
       <label class="form-label">Image: </label>
-      <input type="file" name="imageUrl" id="imageUrl" accept="image/*" class="form-control">
+      <input type="text" name="imageUrl" id="imageUrl">
+      <input type="file" name="imageUpload" id="imageUpload" accept="image/*" class="form-control">
     </div>
     <input type="submit" class="btn btn-primary" value="Save">
   </form>
@@ -42,5 +43,34 @@
 </div>
 
 <th:block th:replace="layout :: footer"></th:block>
+
+<script>
+  $('#imageUpload').change(function () {
+    if (window.FormData !== undefined) {
+      var fileUpload = $('#imageUpload').get(0);
+      var files = fileUpload.files;
+      var formData = new FormData();
+      formData.append('file', files[0]);
+
+      $.ajax(
+              {
+                type: 'POST',
+                url: '/api/images/upload',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (urlImage) {
+
+                  $('#imageUpload').attr('src', urlImage);
+                  $('#imageUrl').val(urlImage);
+                },
+                error: function (err) {
+                  alert('Error ', `${err}`);
+                }
+              });
+    }
+  });
+</script>
+}
 </body>
 </html>
