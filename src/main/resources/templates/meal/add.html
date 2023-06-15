@@ -19,7 +19,7 @@
     <div class="col-6 mb-3">
       <label class="form-label" for="category">Category: </label>
       <input class="form-control" type="text" th:field="*{category}" id="category">
-      <span class="text-danger" th:if="${#fields.hasErrors('amountLeft')}" th:errors="*{amountLeft}"></span>
+      <span class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{amountLeft}"></span>
     </div>
     <div class="col-6 mb-3">
       <label class="form-label" for="amountLeft">Amount Left: </label>
@@ -32,8 +32,8 @@
       <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
     </div>
     <div class="col-6 mb-3">
-      <label class="form-label">Image: </label>
-      <input type="text" name="imageUrl" id="imageUrl">
+      <label class="form-label" for="imageUrl">Image: </label>
+      <input type="text" name="imageUrl" id="imageUrl" th:field="*{imageUrl}" class="form-control">
       <input type="file" name="imageUpload" id="imageUpload" accept="image/*" class="form-control">
     </div>
     <input type="submit" class="btn btn-primary" value="Save">
@@ -60,7 +60,6 @@
                 processData: false,
                 data: formData,
                 success: function (urlImage) {
-
                   $('#imageUpload').attr('src', urlImage);
                   $('#imageUrl').val(urlImage);
                 },

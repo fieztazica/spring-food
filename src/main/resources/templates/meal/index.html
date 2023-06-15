@@ -25,13 +25,10 @@
         <tr th:each="meal : ${meals}">
             <td th:text="${meal.id}"></td>
             <td th:text="${meal.name}"></td>
-            <td>
-                <img src="${meal.imageUrl}">
-            </td>
             <td th:text="${meal.category}"></td>
             <td th:text="${meal.amountLeft}"></td>
             <td th:text="${meal.price}"></td>
-            <td> <img height="120" th:src="@{/images/} + ${meal.imageUrl}" width="150"/></td>
+            <td><img height="120" th:src="${meal.imageUrl}" width="150"/></td>
             <td>
                 <a th:href="@{/meals/edit/{id}(id=${meal.id})}">
                     Edit

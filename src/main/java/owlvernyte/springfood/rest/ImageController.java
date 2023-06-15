@@ -1,13 +1,17 @@
 package owlvernyte.springfood.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import owlvernyte.springfood.service.UploadService;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,13 +23,21 @@ import java.nio.file.Paths;
 public class ImageController {
     private final Path root = Paths.get("uploads");
 
+    @Autowired
+    private UploadService uploadService;
+
+    @GetMapping
+    public ResponseEntity<String> testGet() {
+        return ResponseEntity.ok().body("Hi");
+    }
+
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
             Files.createDirectories(root);
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            message = "/api/images/files/" + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();

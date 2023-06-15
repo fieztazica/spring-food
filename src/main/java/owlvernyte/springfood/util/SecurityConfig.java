@@ -10,6 +10,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,18 +61,19 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/css/**", "/js/**", "/",
-                                        "/register", "/error", "/contact", "/email/**", "/oauth/**")
+                                        "/register", "/error", "/contact", "/email/**", "/oauth/**", "/api/**")
                                 .permitAll()
-                                .requestMatchers("/meals/edit",
-                                        "/meals/delete", "/meals/add")
+                                .requestMatchers("/meals/edit","/meals/edit/**", "/meals/add", "/meals/delete/**")
                                 .hasAnyAuthority("ADMIN")
-                                .requestMatchers("/meals")
+                                .requestMatchers("/meals/**")
                                 .permitAll()
 //                        .hasAnyAuthority("USER", "ADMIN")
                                 .requestMatchers("/orders/**")
                                 .hasAnyAuthority("USER", "ADMIN")
-                                .requestMatchers("/api/**")
-                                .hasAnyAuthority("USER", "ADMIN")
+//                                .requestMatchers("/api/cart/**", "/api/images/**")
+//                                .permitAll()
+                                .requestMatchers("/api/**")    .permitAll()
+//                                .hasAnyAuthority("USER", "ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -116,7 +118,10 @@ public class SecurityConfig {
                         sessionManagement.maximumSessions(1)
                                 .expiredUrl("/login")
                 )
-                .httpBasic(httpBasic -> httpBasic.realmName("dat"));
+                .httpBasic(httpBasic -> httpBasic.realmName("dat"))
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+        ;
 
         return http.build();
     }

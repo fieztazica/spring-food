@@ -5,11 +5,7 @@
     <title>Spring Food</title>
     <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link th:fragment="style-css" rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+<!--    <link href="/css/sb-admin-2.min.css" rel="stylesheet">-->
 </head>
 <body>
 <header th:fragment="header">
@@ -30,14 +26,17 @@
                     <li class="nav-item"><a href="/contact" class="nav-link link-dark px-2">Contact</a></li>
                     <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')"><a href="/meals" class="nav-link link-dark px-2">Meals</a></li>
                     <li class="nav-item"><a href="/orders" class="nav-link link-dark px-2">Orders</a></li>
-                    <li class="nav-item"><a href="/cart" class="nav-link link-dark px-2">Cart</a></li>
+                    <li class="nav-item"><a href="/cart" class="nav-link link-dark px-2">Cart
+                        <span id="cartSize"></span>
+                    </a></li>
                 </ul>
             </div>
 
             <ul id="nav-right" class="nav">
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <span sec:authorize="hasAnyAuthority('ADMIN')">ADMIN</span>
-                    <span class="px-2" sec:authentication="name"></span>
+                <li class="nav-item mr-2" sec:authorize="isAuthenticated()">
+                    Hello,
+                    <span class="ml-1" sec:authentication="name"></span>
+                    <span sec:authorize="hasAnyAuthority('ADMIN')">(ADMIN)</span>
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" method="post">
@@ -68,5 +67,16 @@
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/jquery-3.7.0.min.js}"></script>
 </footer>
+
+<script th:fragment="getCartSize">
+    function getCartSize() {
+        fetch("/api/cart/size").then(r => {
+            r.text().then(text => {
+                $("#cartSize").text(`(${text})`)
+            })
+        })
+    }
+    getCartSize()
+</script>
 </body>
 </html>
