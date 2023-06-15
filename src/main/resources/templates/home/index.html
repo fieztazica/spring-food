@@ -30,12 +30,12 @@
                 <hr class="my-0"/>
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center pb-2 mb-1">
-                        <form th:action="@{/meals/add-to-cart}" method="post" class="d-inline">
+                        <form th:action="@{/meals/add-to-cart}" method="post" class="d-inline w-100">
                             <input type="hidden" name="id" th:value="${meal.getId()}">
                             <input type="hidden" name="title" th:value="${meal.getName()}">
                             <input type="hidden" name="price"
                                    th:value="${meal.getPrice()}">
-                            <button type="submit" class="btn btn-success"
+                            <button type="submit" class="btn btn-success w-100"
                                     onclick="return confirm('Are you sure you want to add this meal to cart?')">
                                 Add to cart
                             </button>

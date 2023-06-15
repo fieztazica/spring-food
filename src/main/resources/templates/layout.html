@@ -33,9 +33,10 @@
             </div>
 
             <ul id="nav-right" class="nav">
-                <li class="nav-item mr-2" sec:authorize="isAuthenticated()">
+                <li class="nav-item p-2" sec:authorize="isAuthenticated()">
                     Hello,
                     <span class="ml-1" sec:authentication="name"></span>
+                    !
                     <span sec:authorize="hasAnyAuthority('ADMIN')">(ADMIN)</span>
                 </li>
                 <li sec:authorize="isAuthenticated()">
