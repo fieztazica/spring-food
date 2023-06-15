@@ -19,6 +19,7 @@
             <th>Total Price</th>
             <th>Paid</th>
             <th>Change</th>
+            <th sec:authorize="hasAnyAuthority('ADMIN')" >Action</th>
         </tr>
         <tr th:each="order : ${orders}">
             <td th:text="${order.id}"></td>
@@ -27,8 +28,8 @@
             <td th:text="${order.total}"></td>
             <td th:text="${order.paid}"></td>
             <td th:text="${order.changeMoney}"></td>
-            <td>
-                <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/orders/edit/{id}(id=${order.id})}">
+            <td sec:authorize="hasAnyAuthority('ADMIN')" >
+                <a th:href="@{/orders/edit/{id}(id=${order.id})}">
                     Edit
                 </a> |
                 <a th:href="@{/orders/delete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')">
