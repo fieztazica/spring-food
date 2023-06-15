@@ -60,12 +60,16 @@ public class CartController {
     }
 
     @GetMapping("/updateCart/{id}/{quantity}")
-    public String updateCart(HttpSession session, @PathVariable Long id, @PathVariable int quantity) {
+    public String updateCart(Model model,HttpSession session, @PathVariable Long id, @PathVariable int quantity) {
         var cart = cartService.getCart(session);
         cart.updateItems(id, quantity);
-        return "cart/index";
+        model.addAttribute("cart",cart);
+        return "redirect:/cart/updateCart";
     }
-
+    @PostMapping("/updateCart")
+    public String updateCartReload(){
+        return "redirect:/cart";
+    }
     @GetMapping("/clearCart")
     public String clearCart(HttpSession session) {
         cartService.removeCart(session);

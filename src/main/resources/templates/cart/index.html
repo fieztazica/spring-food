@@ -72,5 +72,25 @@ scale=1.0">
 </div>
 <th:block th:replace="~{layout::footer}"></th:block>
 <script th:src="@{/js/cart.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+        $(document).ready(function() {
+            $('.quantity').on('change', function() {
+                var quantity = $(this).val();
+                var itemId = $(this).data('id');
+
+                $.ajax({
+                    type: 'Get',
+                    url: '/cart/updateCart/' + itemId + '/' + quantity,
+                    success: function(response) {
+                        window.location.href = '/cart/index';
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
