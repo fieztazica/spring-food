@@ -56,16 +56,18 @@ public class CartController {
     }
 
     @GetMapping("/updateCart/{id}/{quantity}")
-    public String updateCart(Model model,HttpSession session, @PathVariable Long id, @PathVariable int quantity) {
+    public String updateCart(Model model, HttpSession session, @PathVariable Long id, @PathVariable int quantity) {
         var cart = cartService.getCart(session);
         cart.updateItems(id, quantity);
-        model.addAttribute("cart",cart);
+        model.addAttribute("cart", cart);
         return "redirect:/cart/updateCart";
     }
+
     @PostMapping("/updateCart")
-    public String updateCartReload(){
+    public String updateCartReload() {
         return "redirect:/cart";
     }
+
     @GetMapping("/clearCart")
     public String clearCart(HttpSession session) {
         cartService.removeCart(session);
@@ -98,7 +100,8 @@ public class CartController {
             order.setUser(user);
             order.setOrderedAt(LocalDate.now());
             orderService.addOrder(order);
-            setOrderDetailsFromCart(order,cart);
+            setOrderDetailsFromCart(order, cart);
+            cartService.removeCart(session);
 
             return "redirect:/orders/cash-pay";
         } catch (Exception e) {
@@ -121,7 +124,7 @@ public class CartController {
             Meal meal = mealService.getMealById(item.getId());
             Long AmountLeft = meal.getAmountLeft();
             int quantity = item.getQuantity();
-            meal.setAmountLeft(AmountLeft-quantity);
+            meal.setAmountLeft(AmountLeft - quantity);
             mealService.upsertMeal(meal);
         });
         order.setOrderDetails(orderDetails);
