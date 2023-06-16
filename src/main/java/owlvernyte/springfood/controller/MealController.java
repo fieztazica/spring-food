@@ -62,7 +62,6 @@ public class MealController {
         return "redirect:/meals";
     }
 
-
     @GetMapping("/edit/{id}")
     public String editMealForm(@PathVariable("id") Long id, Model model) {
         Meal editMeal = mealService.getMealById(id);
@@ -84,21 +83,6 @@ public class MealController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         mealService.deleteMeal(id);
-        return "redirect:/meals";
-    }
-
-    @PostMapping("/upload")
-    public String uploadImage(Model model, @RequestParam("file") MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            String uploadDir = UPLOAD_DIRECTORY;
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            String filePath = uploadDir + File.separator + fileName;
-            File destination = new File(filePath);
-            file.transferTo(destination);
-
-            model.addAttribute("images", filePath);
-        }
-
         return "redirect:/meals";
     }
 
