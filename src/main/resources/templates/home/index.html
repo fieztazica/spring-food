@@ -13,7 +13,7 @@
         <div class="col-lg-3 col-md-2 col-sm-6 mb-4" th:each="meal : ${meals}">
             <div class="card overflow-hidden">
                 <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light"
-                     data-mdb-ripple-color="light">
+                     data-mdb-ripple-color="light" style="width: 300px; height: 300px;">
                     <img width="100%" height="100%" th:src="${meal.imageUrl}"
                          class="img-fluid hover-effect object-fit-cover" alt="product"/>
                 </div>

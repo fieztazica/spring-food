@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 .requestMatchers("/meals/**")
                                 .permitAll()
 //                        .hasAnyAuthority("USER", "ADMIN")
-                                .requestMatchers("/orders")
+                                .requestMatchers("/orders","/orders/cash-pay")
                                 .hasAnyAuthority("USER", "ADMIN")
                                 .requestMatchers("/orders/**")
                                 .hasAnyAuthority("ADMIN")

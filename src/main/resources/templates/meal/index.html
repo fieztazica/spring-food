@@ -36,15 +36,6 @@
                 <a th:href="@{/meals/delete/{id}(id=${meal.id})}" onclick="return confirm('Are you sure?')">
                     Delete
                 </a>
-                <form th:action="@{/meals/add-to-cart}" method="post" class="d-inline">
-                    <input type="hidden" name="id" th:value="${meal.getId()}">
-                    <input type="hidden" name="title"th:value="${meal.getName()}">
-                    <input type="hidden" name="price"
-                           th:value="${meal.getPrice()}">
-                    <button type="submit" class="btn btn-success"
-                            onclick="return confirm('Are you sure you want to add this book to cart?')">
-                        Add to cart</button>
-                </form>
             </td>
         </tr>
     </table>
